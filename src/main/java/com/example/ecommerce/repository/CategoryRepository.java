@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
-    @Query("from Category c where c.parentCategory = null")
-    List<Category> getParentCategories();
+//    @Query("from Category c where c.parentCategory = null")
+//    List<Category> getParentCategories();
+//
+//    @Query("select c from Category c where c.parentCategory =?1")
+//    List<Category> getSubCategoriesByParentCategory(Category parentCategory);
 }

@@ -20,7 +20,19 @@ public class AdminService {
        this.adminRepository = adminRepository;
     }
 
-
+    public List<Admin> getAllAdmins(){
+        return adminRepository.findAll();
+    }
+    public Admin getAdminById(int id){
+        Optional<Admin> admin = adminRepository.findById(id);
+        return admin.orElse(null);
+    }
+    public void addAdmin(Admin admin){
+        adminRepository.save(admin);
+    }
+    public void deleteAdmin(Integer id){
+        adminRepository.deleteById(id);
+    }
     public Admin checkAdmin(String email, String password)
     {
         Optional<Admin> admin = adminRepository.findAdminByEmail(email);
@@ -32,7 +44,7 @@ public class AdminService {
         return null;
     }
 
-    public void updateAdmin(Admin admin)
+    public void updateAdmin(int id,Admin admin)
     {
         try {
 //            entityManager.getTransaction().begin();
@@ -43,7 +55,12 @@ public class AdminService {
 //
 //            entityManager.getTransaction().commit();
 //            System.out.println(" transaction completed");
-            adminRepository.save(admin);
+            Admin admin1 = adminRepository.findById(id).get();
+            admin1.setPassword(admin.getPassword());
+            admin1.setEmail(admin.getEmail());
+            admin1.setName(admin.getName());
+            adminRepository.save(admin1);
+
 
         } catch (RuntimeException e) {
 

@@ -7,10 +7,12 @@ import com.example.ecommerce.entity.UserProductId;
 import com.example.ecommerce.repository.ProductRepository;
 import com.example.ecommerce.repository.UserProductCartRepository;
 import com.example.ecommerce.repository.UserRepository;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 public class CartService {
 
     UserProductCartRepository cartRepository;
@@ -65,26 +67,26 @@ public class CartService {
         }
     }
 //
-//    public List<UserProductCart> getUserCartProducts(User user){
-//        List<UserProductCart> productCartList= cartDao.getCartByUser(user);
-//        return productCartList;
-//    }
+    public List<UserProductCart> getUserCartProducts(User user){
+        List<UserProductCart> productCartList= cartRepository.getCartByUser(user);
+        return productCartList;
+    }
 //
-//    public boolean deleteProductFromCart(int userId,int productId){
-//        entityManager.getTransaction().begin();
-//        boolean result= cartDao.deleteProductFromCart(userId,productId);
-//        entityManager.getTransaction().commit();
-//        return result;
-//    }
-//    public void updateProductQuantity(int userId,int productId,int quantity){
-//        try {
-//            entityManager.getTransaction().begin();
-//            cartDao.updateProductQuantity(userId,productId,quantity);
-//            entityManager.getTransaction().commit();
-//        }catch (Exception e){
-//            throw new RuntimeException(e.getMessage());
-//        }
-//    }
+    public void deleteProductFromCart(int userId,int productId){
+
+         cartRepository.deleteProductFromCart(userId,productId);
+    }
+    public void updateProductQuantity(int userId,int productId,int quantity){
+        try {
+
+            Optional<UserProductCart> oldUserProductCart = cartRepository.findById(new UserProductId(userId,productId));
+            oldUserProductCart.get().setProductQuantity(quantity);
+            cartRepository.save(oldUserProductCart.get());
+
+        }catch (Exception e){
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 //    public int cartProductsCount(int userId)
 //    {
 //        return cartDao.countProductsByUser(userId);
